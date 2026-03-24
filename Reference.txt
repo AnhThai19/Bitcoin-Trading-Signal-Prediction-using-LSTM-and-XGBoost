@@ -1,5 +1,0 @@
-- Git repo : https://github.com/stefan-jansen/machine-learning-for-trading
-
-- https://machinelearningmastery.com/xgboost-for-time-series-forecasting/
-
-- https://machinelearningmastery.com/convert-time-series-supervised-learning-problem-python/
