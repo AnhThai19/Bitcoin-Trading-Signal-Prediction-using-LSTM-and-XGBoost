@@ -1,0 +1,299 @@
+📊 Dự án: Xây dựng chiến lược giao dịch Bitcoin bằng Machine Learning
+1. Tổng quan dự án
+
+Dự án này nhằm mục tiêu xây dựng một chiến lược giao dịch tự động (systematic trading strategy) cho Bitcoin dựa trên các phương pháp Machine Learning và phân tích chuỗi thời gian tài chính.
+
+Thay vì dự báo trực tiếp giá Bitcoin trong tương lai (một bài toán rất khó), hệ thống sẽ dự đoán hướng biến động giá trong ngắn hạn (price direction) và chuyển các dự đoán này thành tín hiệu giao dịch (trading signals).
+
+Sau đó chiến lược sẽ được backtest trên dữ liệu lịch sử để đánh giá hiệu quả giao dịch dựa trên các chỉ số tài chính như Sharpe ratio, drawdown và cumulative return.
+
+Dự án mô phỏng quy trình làm việc của một quantitative researcher / machine learning engineer trong lĩnh vực algorithmic trading.
+
+2. Mục tiêu của dự án
+
+Các mục tiêu chính của dự án bao gồm:
+
+Phân tích dữ liệu chuỗi thời gian tài chính của Bitcoin
+
+Xây dựng các mô hình dự đoán hướng biến động giá
+
+Áp dụng feature engineering với các chỉ báo kỹ thuật
+
+Huấn luyện và so sánh nhiều mô hình Machine Learning / Deep Learning
+
+Chuyển dự đoán thành chiến lược giao dịch
+
+Đánh giá hiệu quả chiến lược bằng backtesting
+
+Dự án giúp kết nối giữa machine learning research và ứng dụng thực tế trong giao dịch tài chính.
+
+3. Dữ liệu sử dụng
+
+Dự án sử dụng dữ liệu OHLCV (Open, High, Low, Close, Volume) của Bitcoin.
+
+Các thuộc tính chính:
+
+Giá mở cửa (Open)
+
+Giá cao nhất (High)
+
+Giá thấp nhất (Low)
+
+Giá đóng cửa (Close)
+
+Khối lượng giao dịch (Volume)
+
+Khung thời gian phổ biến:
+
+Dữ liệu theo ngày (Daily)
+
+Nguồn dữ liệu có thể lấy từ:
+
+API của các sàn giao dịch tiền điện tử
+
+Các bộ dữ liệu công khai trên các nền tảng khoa học dữ liệu
+
+4. Định nghĩa bài toán
+
+Bài toán được xây dựng dưới dạng classification problem.
+
+Mục tiêu là dự đoán hướng biến động của giá trong ngày tiếp theo.
+
+Cụ thể:
+
+Nếu return ngày tiếp theo > 0 → label = 1
+
+Nếu return ngày tiếp theo ≤ 0 → label = 0
+
+Return được tính theo log return:
+
+𝑟
+𝑡
++
+1
+=
+log
+⁡
+(
+𝑃
+𝑡
++
+1
+𝑃
+𝑡
+)
+r
+t+1
+	​
+
+=log(
+P
+t
+	​
+
+P
+t+1
+	​
+
+	​
+
+)
+
+Cách tiếp cận này giúp mô hình tập trung vào tín hiệu giao dịch có lợi nhuận thay vì cố gắng dự đoán chính xác giá.
+
+5. Feature Engineering
+
+Feature engineering đóng vai trò quan trọng trong dự báo tài chính.
+
+Các feature được xây dựng từ dữ liệu giá và volume.
+
+Feature về giá
+
+Lag returns (1, 3, 7 ngày)
+
+Rolling returns
+
+Momentum
+
+Technical Indicators
+
+Một số chỉ báo kỹ thuật phổ biến:
+
+SMA (Simple Moving Average)
+
+EMA (Exponential Moving Average)
+
+RSI (Relative Strength Index)
+
+MACD
+
+Bollinger Bands
+
+ATR (Average True Range)
+
+Feature về volatility
+
+Rolling standard deviation
+
+Historical volatility
+
+Price range
+
+Feature về volume
+
+Volume momentum
+
+Volume spike
+
+Volume relative to moving average
+
+Các feature này giúp mô hình nắm bắt được trend, momentum và volatility của thị trường.
+
+6. Các mô hình sử dụng
+Baseline models
+
+Các mô hình cơ bản:
+
+Logistic Regression
+
+Random Walk benchmark
+
+Những mô hình này giúp đánh giá mức độ cải thiện của các mô hình phức tạp hơn.
+
+Machine Learning models
+
+Các mô hình ML phù hợp với dữ liệu dạng bảng:
+
+Random Forest
+
+Gradient Boosting
+
+XGBoost
+
+LightGBM
+
+Các mô hình này có khả năng bắt các quan hệ phi tuyến trong dữ liệu tài chính.
+
+Deep Learning models (tùy chọn)
+
+Các mô hình học sâu cho chuỗi thời gian:
+
+LSTM (Long Short-Term Memory)
+
+Temporal CNN
+
+Các mô hình này có thể học pattern theo thời gian trong chuỗi dữ liệu.
+
+7. Phương pháp đánh giá mô hình
+
+Do dữ liệu tài chính có tính chuỗi thời gian, việc chia train-test ngẫu nhiên sẽ gây data leakage.
+
+Dự án sử dụng Walk-forward validation.
+
+Ví dụ:
+
+Train: 2017–2020 → Test: 2021
+Train: 2017–2021 → Test: 2022
+Train: 2017–2022 → Test: 2023
+
+Phương pháp này mô phỏng quy trình train trên dữ liệu quá khứ và test trên dữ liệu tương lai.
+
+8. Chiến lược giao dịch
+
+Dự đoán của mô hình được chuyển thành tín hiệu giao dịch.
+
+Ví dụ:
+
+Nếu xác suất tăng > 0.6 → Long BTC
+Nếu xác suất giảm < 0.4 → Short BTC
+Nếu ở giữa → Hold
+
+Các yếu tố bổ sung có thể bao gồm:
+
+Position sizing
+
+Transaction cost
+
+Risk control
+
+9. Backtesting
+
+Backtesting được sử dụng để mô phỏng hiệu suất chiến lược trong quá khứ.
+
+Các thành phần chính:
+
+Signal generation
+
+Position management
+
+Portfolio return calculation
+
+Transaction cost modeling
+
+Chiến lược sẽ được so sánh với buy-and-hold strategy.
+
+10. Các chỉ số đánh giá
+
+Hiệu quả chiến lược được đánh giá bằng các chỉ số:
+
+Return metrics
+
+Cumulative Return
+
+Annualized Return
+
+Risk metrics
+
+Sharpe Ratio
+
+Sortino Ratio
+
+Maximum Drawdown
+
+Strategy metrics
+
+Win Rate
+
+Profit Factor
+
+Turnover
+
+11. Pipeline của dự án
+
+Workflow tổng thể:
+
+Data Collection
+      ↓
+Data Cleaning
+      ↓
+Feature Engineering
+      ↓
+Model Training
+      ↓
+Walk-forward Validation
+      ↓
+Signal Generation
+      ↓
+Backtesting
+      ↓
+Performance Evaluation
+
+Pipeline này tương tự workflow của các team quantitative research.
+
+12. Kỹ năng thể hiện trong dự án
+
+Dự án thể hiện các kỹ năng:
+
+Financial time series analysis
+
+Feature engineering cho dữ liệu tài chính
+
+Machine learning modeling
+
+Deep learning cho time series
+
+Systematic trading strategy design
+
+Backtesting framework
+
+Python ML ecosystem
